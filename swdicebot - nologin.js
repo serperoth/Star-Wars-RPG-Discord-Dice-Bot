@@ -1,7 +1,7 @@
 //Star Wars RPG Discord Dice Bot
 //by @Serperoth#8607, with a major overhaul and some code borrowed from @Tezzeret#5206
-//version 1.0
-//needs: proper calculation and display of results, orokos style input, testing
+//version 1.5
+//needs: proper display of results, testing, bugchecking
 
 
 
@@ -36,7 +36,7 @@ bot.on('message', msg => {
 		let dice = args.join(' ')
 		for (var i = 0, len = dice.length; i < len; i++) {
 			switch (dice.charAt(i)) {
-				case 'B':	boostDie(1); break
+				case 'B': boostDie(1); break
 				case 'S': setbackDie(1); break
 				case 'A': abilityDie(1); break
 				case 'D': difficultyDie(1); break
@@ -66,6 +66,47 @@ bot.on('message', msg => {
 
 		//msg.channel.sendMessage("rolled a " + result + '\n' + "failure: " + failure + '\n' + "threat: " + threat + '\n' + "despair: " + despair)
 		msg.channel.sendMessage('final result:\n' + abs(success_total) + success_state + abs(advantage_total) + advantage_state + force_result)
+	}
+	if (msg.content.startsWith(prefix + 'orokos')){	//kinda wanna rewrite the whole section, it was working earlier
+		resetVariables()
+		let args = msg.content.split(' ').slice(1)
+		let dice = args.join(' ')
+		dice = dice.split(' ')	//Ideally, should have each set of XdY as a string in the array, we know it works
+		for (var i = 0, len = dice.length; i < len; i++) {	//Do the thing for every XdY I think the issue might be here???
+			switch (dice[i].charAt(dice[i].length - 1)) {	//for the current XdY, look at the last character 
+				case 'B': boostDie(parseInt(dice[i])); break
+				case 'S': setbackDie(parseInt(dice[i])); break
+				case 'A': abilityDie(parseInt(dice[i])); break
+				case 'D': difficultyDie(parseInt(dice[i])); break
+				case 'P': proficiencyDie(parseInt(dice[i])); break
+				case 'C': challengeDie(parseInt(dice[i])); break
+				case 'F': forceDie(parseInt(dice[i])); break
+				default: break
+			}
+		}
+		// tally up net success/failure
+		let success_total = success - failure
+		let success_state = ' success\n'
+		if (success_total < 1) {
+			success_state = ' failure\n'
+		}
+		let advantage_total = advantage - threat
+		let advantage_state = ' advantage/threat\n'
+		if (advantage_total > 0) {
+			advantage_state = ' advantage\n'
+		} else if (advantage_total < 0) {
+			advantage_state = ' threat\n'
+		}
+		let force_result = ''
+		if ((light > 0) || (dark > 0)) {
+			force_result = '' + light + ' light and ' + dark + ' dark'
+		}
+
+		//msg.channel.sendMessage("rolled a " + result + '\n' + "failure: " + failure + '\n' + "threat: " + threat + '\n' + "despair: " + despair)
+		msg.channel.sendMessage('final result:\n' + abs(success_total) + success_state + abs(advantage_total) + advantage_state + force_result)
+	}
+	if (msg.content.startsWith(prefix + 'help')){
+		msg.channel.sendMessage("Use !roll then write the dice by their first letter (AADD would roll two Ability dice, and two Difficulty dice)\nUse !orokos then write the dice in XY format, with X being the amount you need and Y being the kind of die.\nIn orokos format, separate the dice sets with spaces, and it doesn't matter what's between X and Y.")
 	}
 })
 
@@ -329,8 +370,8 @@ function forceDie (num) {
 			case 2:	// 1 dark
 				dark++
 				break
-			case 3:	// 1 failure
-				failure++
+			case 3:	// 1 dark
+				dark++
 				break
 			case 4:	// 1 dark
 				dark++
