@@ -65,7 +65,7 @@ bot.on('message', msg => {
 		}
 
 		//msg.channel.sendMessage("rolled a " + result + '\n' + "failure: " + failure + '\n' + "threat: " + threat + '\n' + "despair: " + despair)
-		msg.channel.sendMessage('final result:\n' + abs(success_total) + success_state + abs(advantage_total) + advantage_state + force_result)
+		msg.channel.sendMessage('final result:\n' + abs(success_total) + success_state + abs(advantage_total) + advantage_state + force_result + '\ntriumph: ' + triumph + ' despair: ' + despair)
 	}
 	if (msg.content.startsWith(prefix + 'orokos')){	//kinda wanna rewrite the whole section, it was working earlier
 		resetVariables()
@@ -103,7 +103,7 @@ bot.on('message', msg => {
 		}
 
 		//msg.channel.sendMessage("rolled a " + result + '\n' + "failure: " + failure + '\n' + "threat: " + threat + '\n' + "despair: " + despair)
-		msg.channel.sendMessage('final result:\n' + abs(success_total) + success_state + abs(advantage_total) + advantage_state + force_result)
+		msg.channel.sendMessage('final result:\n' + abs(success_total) + success_state + abs(advantage_total) + advantage_state + force_result + '\ntriumph: ' + triumph + ' despair: ' + despair)
 	}
 	if (msg.content.startsWith(prefix + 'help')){
 		msg.channel.sendMessage("Use !roll then write the dice by their first letter (AADD would roll two Ability dice, and two Difficulty dice)\nUse !orokos then write the dice in XY format, with X being the amount you need and Y being the kind of die.\nIn orokos format, separate the dice sets with spaces, and it doesn't matter what's between X and Y.")
