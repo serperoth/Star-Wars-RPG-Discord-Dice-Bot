@@ -23,7 +23,7 @@ var light = 0
 var dark = 0
 var result = 0
 var resultstext = ''
-var verbose = 1
+var verbose = 0
 
 bot.on('message', msg => {
 	// Set the prefix
